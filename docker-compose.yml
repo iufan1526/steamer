@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+    db:
+        image: mysql:latest
+        volumes:
+            - ./db_data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: steamer
+        ports:
+            - '3306:3306'
