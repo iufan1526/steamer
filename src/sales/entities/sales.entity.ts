@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { GamesEntity } from 'src/games/entities/games.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class SalesEntity extends BaseEntity {
@@ -21,7 +21,7 @@ export class SalesEntity extends BaseEntity {
 
     @ManyToOne(
         () => GamesEntity,
-        (game) => {
+        (game: GamesEntity) => {
             game.sales;
         },
     )
