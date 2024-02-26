@@ -11,10 +11,7 @@ export class GamesController {
 
     @Get()
     async test() {
-        const apiUrl = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/';
-        const result = await this.httpService.axiosRef.get(apiUrl);
-
-        console.log(result.data);
+        this.gamesService.createGames();
     }
 
     @Get('games')

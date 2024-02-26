@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { BaseEntity } from 'src/common/entity/base.entity';
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { genresEntity } from 'src/genres/entities/genres.entity';
 import { imagesEntity } from 'src/images/entities/images.entity';
 import { SalesEntity } from 'src/sales/entities/sales.entity';
