@@ -1,6 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 import { BaseEntity } from 'src/common/entity/base.entity';
-import { Column, Entity } from 'typeorm';
+import { SalesEntity } from 'src/sales/entities/sales.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity('games')
 export class GamesEntity extends BaseEntity {
@@ -43,4 +44,7 @@ export class GamesEntity extends BaseEntity {
     @Column()
     @IsNotEmpty()
     minimumRequirement: string;
+
+    @OneToMany(() => SalesEntity, (sales) => sales.game)
+    sales: SalesEntity[];
 }

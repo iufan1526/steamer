@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/common/entity/base.entity';
-import { GamesEntity } from 'src/games/entity/games.entity';
+import { GamesEntity } from 'src/games/entities/games.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity()
@@ -19,6 +19,11 @@ export class SalesEntity extends BaseEntity {
     })
     discountPercent: number;
 
-    // @ManyToOne(() => GamesEntity, (game) => {game.sales})
-    // gameId: number;
+    @ManyToOne(
+        () => GamesEntity,
+        (game) => {
+            game.sales;
+        },
+    )
+    game: GamesEntity;
 }
