@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { genresEntity } from 'src/genres/entities/genres.entity';
-import { imagesEntity } from 'src/images/entities/images.entity';
+import { GenresEntity } from 'src/genres/entities/genres.entity';
+import { ImagesEntity } from 'src/images/entities/images.entity';
 import { SalesEntity } from 'src/sales/entities/sales.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
@@ -50,9 +50,9 @@ export class GamesEntity extends BaseEntity {
     @OneToMany(() => SalesEntity, (sales) => sales.game)
     sales: SalesEntity[];
 
-    @OneToMany(() => genresEntity, (genres: genresEntity) => genres.game)
-    genres: genresEntity[];
+    @OneToMany(() => GenresEntity, (genres: GenresEntity) => genres.game)
+    genres: GenresEntity[];
 
-    @OneToMany(() => imagesEntity, (image: imagesEntity) => image.game)
-    images: imagesEntity[];
+    @OneToMany(() => ImagesEntity, (image: ImagesEntity) => image.game)
+    images: ImagesEntity[];
 }
