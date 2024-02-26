@@ -23,7 +23,13 @@ export class GamesEntity extends BaseEntity {
     @IsNotEmpty()
     score: number;
 
-    @Column({ name: 'is_possible_multi' })
+    @Column({
+        name: 'movie_url',
+        nullable: true,
+    })
+    movieUrl: string;
+
+    @Column({ name: 'is_possible_multi', default: false })
     @IsNotEmpty()
     isPossibleMulti: boolean;
 
@@ -43,16 +49,30 @@ export class GamesEntity extends BaseEntity {
     @IsNotEmpty()
     isLinux: boolean;
 
-    @Column()
+    @Column({
+        name: 'release_date',
+        nullable: true,
+    })
+    releaseDate: Date;
+
+    @Column({
+        type: 'text',
+    })
     @IsNotEmpty()
     minimumRequirement: string;
 
-    @OneToMany(() => SalesEntity, (sales) => sales.game)
+    @OneToMany(() => SalesEntity, (sales: SalesEntity) => sales.game, {
+        cascade: true,
+    })
     sales: SalesEntity[];
 
-    @OneToMany(() => GenresEntity, (genres: GenresEntity) => genres.game)
+    @OneToMany(() => GenresEntity, (genres: GenresEntity) => genres.game, {
+        cascade: true,
+    })
     genres: GenresEntity[];
 
-    @OneToMany(() => ImagesEntity, (image: ImagesEntity) => image.game)
+    @OneToMany(() => ImagesEntity, (image: ImagesEntity) => image.game, {
+        cascade: true,
+    })
     images: ImagesEntity[];
 }

@@ -14,16 +14,16 @@ services:
         networks:
             - server
 
-    nestjs-app:
-        image: nest-app3
-        env_file: environment/.dev.env
-        restart: always
-        ports:
-            - 3000:3000
-        depends_on:
-            - db
-        networks:
-            - server
+    # nestjs-app:
+    #     image: nest-app3
+    #     env_file: environment/.dev.env
+    #     restart: always
+    #     ports:
+    #         - 3000:3000
+    #     depends_on:
+    #         - db
+    #     networks:
+    #         - server
 
 networks:
     server:
