@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmCinfigService } from './config/database-config/typeorm.cofing';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SalesModule } from './sales/sales.module';
+import { GenresModule } from './genres/genres.module';
+import { ImagesModule } from './images/images.module';
 
 @Module({
     imports: [
@@ -20,6 +22,8 @@ import { SalesModule } from './sales/sales.module';
         ScheduleModule.forRoot(),
         GamesModule,
         SalesModule,
+        GenresModule,
+        ImagesModule,
     ],
     controllers: [AppController],
     providers: [AppService],
