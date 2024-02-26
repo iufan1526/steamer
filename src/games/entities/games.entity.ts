@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { BaseEntity } from 'src/common/entity/base.entity';
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { SalesEntity } from 'src/sales/entities/sales.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
