@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { GamesService } from './games.service';
 import { HttpService } from '@nestjs/axios';
 
@@ -15,5 +15,10 @@ export class GamesController {
         const result = await this.httpService.axiosRef.get(apiUrl);
 
         console.log(result.data);
+    }
+
+    @Get('games')
+    async getAllGames(@Query('orderBy') orderBy: string, @Query('genre') genre: string) {
+        return this.gamesService.getAllgames(orderBy, genre);
     }
 }
