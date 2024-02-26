@@ -5,6 +5,8 @@ import { GamesModule } from './games/games.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmCinfigService } from './config/database-config/typeorm.cofing';
+import { ScheduleModule } from '@nestjs/schedule';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
     imports: [
@@ -15,7 +17,9 @@ import { TypeOrmCinfigService } from './config/database-config/typeorm.cofing';
         TypeOrmModule.forRootAsync({
             useClass: TypeOrmCinfigService,
         }),
+        ScheduleModule.forRoot(),
         GamesModule,
+        SalesModule,
     ],
     controllers: [AppController],
     providers: [AppService],
