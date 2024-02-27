@@ -1,8 +1,8 @@
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { BaseEntity } from '../../common/entities/base.entity';
 import { GamesEntity } from 'src/games/entities/games.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-@Entity()
+@Entity('sales')
 export class SalesEntity extends BaseEntity {
     @Column({
         name: 'origin_price',
