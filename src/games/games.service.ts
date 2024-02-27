@@ -23,14 +23,35 @@ export class GamesService {
         const { apps } = rawGames.data.applist;
         let count = 0;
 
-        for (let i = 0; i < 10000; i++) {
+        let startTime = Date.now();
+        let startMin = Date.now();
+        let count2 = 0;
+        for (let i = 0; i < 202; i++) {
             if (apps[i].name) {
                 const { data } = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${apps[i].appid}`);
+
+                const currentTime = Date.now();
+                if (currentTime - startTime >= 1000) {
+                    console.log(`초당요청수 ${count}`);
+                    startTime = currentTime;
+                    count = 0;
+                }
+                count++;
+
+                const currentTime2 = Date.now();
+                if (currentTime2 - startMin >= 1000 * 60) {
+                    console.log(`분당요청수 ${count2}`);
+                    startMin = currentTime2;
+                    count2 = 0;
+                }
+                console.log(`총합 ${count2}`);
+                count2++;
 
                 if (
                     data[apps[i].appid].success &&
                     !data[apps[i].appid].data.is_free &&
-                    !data[apps[i].appid].data.release_date['coming_soon']
+                    !data[apps[i].appid].data.release_date.coming_soon &&
+                    data[apps[i].appid].data.type === 'game'
                 ) {
                     const game = data[apps[i].appid].data;
 
@@ -96,14 +117,14 @@ export class GamesService {
                         }
                     }
 
-                    await this.gamesRepository.save(newObj);
+                    //await this.gamesRepository.save(newObj);
 
-                    if (i % 200 === 0 && i !== 0) {
-                        console.log(`${i}번째 지연시작`);
-                        await this.sleep(1000 * 60 * 3);
-                    }
+                    // if (i % 100 === 0 && i !== 0) {
+                    //     console.log(`${i}번째 지연시작`);
+                    //     await this.sleep(1000 * 60 * 5);
+                    // }
 
-                    console.log(newObj);
+                    //console.log(newObj);
                 }
             }
         }
