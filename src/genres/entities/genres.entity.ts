@@ -1,5 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { GamesEntity } from 'src/games/entities/games.entity';
+import { SalesEntity } from 'src/sales/entities/sales.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity('genres')

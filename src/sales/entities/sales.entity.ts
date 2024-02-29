@@ -1,6 +1,7 @@
 import { BaseEntity } from '../../common/entities/base.entity';
 import { GamesEntity } from 'src/games/entities/games.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { GenresEntity } from 'src/genres/entities/genres.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('sales')
 export class SalesEntity extends BaseEntity {

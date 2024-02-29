@@ -21,16 +21,42 @@ export class GamesService {
     async createGames() {
         const rawGames = await this.httpService.axiosRef.get(GET_GAMES_BY_STEAM_URL);
         const { apps } = rawGames.data.applist;
-        let count = 0;
 
+        const requestsPerMinute = 199; // 분당 요청 제한
+        let requestCount = 0; // 분당 요청 수를 추적하는 변수
+
+        // 시작 시간 기록
+        let startTime = Date.now();
         for (let i = 0; i < 10000; i++) {
             if (apps[i].name) {
                 const { data } = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${apps[i].appid}`);
 
+                // 분당 요청수 확인
+                requestCount++;
+                console.log(requestCount);
+
+                if (requestCount >= requestsPerMinute) {
+                    // 현재 시간 시작시간 사이 경과시간 계산 (밀리초)
+                    const elapsedTime = Date.now() - startTime;
+
+                    // 6분(300초)이 되도록 대기
+
+                    if (elapsedTime < 300000) {
+                        console.log('분당 요청 제한 초과. 대기중...');
+                        await this.sleep(300000 - elapsedTime);
+                    }
+
+                    startTime = Date.now();
+
+                    //요청 카운트 초기화
+                    requestCount = 0;
+                }
+
                 if (
                     data[apps[i].appid].success &&
                     !data[apps[i].appid].data.is_free &&
-                    !data[apps[i].appid].data.release_date['coming_soon']
+                    !data[apps[i].appid].data.release_date['coming_soon'] &&
+                    data[apps[i].appid].data.type === 'game'
                 ) {
                     const game = data[apps[i].appid].data;
 
@@ -96,12 +122,7 @@ export class GamesService {
                         }
                     }
 
-                    await this.gamesRepository.save(newObj);
-
-                    if (i % 200 === 0 && i !== 0) {
-                        console.log(`${i}번째 지연시작`);
-                        await this.sleep(1000 * 60 * 3);
-                    }
+                    //await this.gamesRepository.save(newObj);
 
                     console.log(newObj);
                 }
