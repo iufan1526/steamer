@@ -238,10 +238,9 @@ export class GamesService {
      * 게임 저장하는 프로세스
      */
     async saveGamesProcess() {
-        await this.redisService.setWorker(1);
         const worker = await this.redisService.getWorker();
 
-        if (parseInt(worker) === 1) {
+        if (parseInt(worker) === 2) {
             const app = await this.rawGamesRepository.findOne({
                 order: {
                     id: 'DESC',
@@ -255,7 +254,7 @@ export class GamesService {
 
             await this.deleteGame(app.appId);
 
-            await this.redisService.setWorker(2);
+            await this.redisService.setWorker(1);
 
             const length = await this.rawGamesRepository.count();
             if (length > 0) {
