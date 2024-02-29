@@ -8,11 +8,11 @@ export class GamesController {
     @Get()
     async test() {
         //this.gamesService.rawGamesSave();
-        this.gamesService.saveGamesProcess();
+        await this.gamesService.saveGamesProcess();
     }
 
-    @Get('appId')
-    async test1() {
-        //return this.gamesService.getAppId();
+    @Get('init')
+    async setInitPcOrder() {
+        return this.gamesService.initPcOrder();
     }
 }
