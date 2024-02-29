@@ -9,6 +9,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { SalesModule } from './sales/sales.module';
 import { GenresModule } from './genres/genres.module';
 import { ImagesModule } from './images/images.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { ImagesModule } from './images/images.module';
         SalesModule,
         GenresModule,
         ImagesModule,
+        RedisModule,
     ],
     controllers: [AppController],
     providers: [AppService],
