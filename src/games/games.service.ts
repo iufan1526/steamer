@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { GET_GAMES_BY_STEAM_URL, GET_GAME_DETAIL_BY_STEAM_URL } from './const/api-url.const';
 import { GamesEntity } from './entities/games.entity';
-import { FindManyOptions, FindOneOptions, FindOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, FindOptions, LegacyOracleNamingStrategy, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SalesEntity } from 'src/sales/entities/sales.entity';
 import { GenresEntity } from 'src/genres/entities/genres.entity';
@@ -211,6 +211,7 @@ export class GamesService {
             }
 
             await this.gamesRepository.save(newObj);
+            console.log('게임 저장의 성공하였습니다. ㅊㅋㅊㅋ');
         }
     }
 
@@ -238,7 +239,6 @@ export class GamesService {
      * 게임 저장하는 프로세스
      */
     async saveGamesProcess() {
-        await this.redisService.setWorker(1);
         const worker = await this.redisService.getWorker();
 
         if (parseInt(worker) === 1) {
@@ -258,16 +258,21 @@ export class GamesService {
             await this.redisService.setWorker(2);
 
             const length = await this.rawGamesRepository.count();
+            console.log('남은 데이터수: ', length);
             if (length > 0) {
-                this.saveGamesProcess();
+                await this.saveGamesProcess();
             }
         } else {
-            this.saveGamesProcess();
+            await this.saveGamesProcess();
         }
 
         console.log('데이터 저장이 성공하였습니다');
 
         return true;
+    }
+
+    async initPcOrder() {
+        await this.redisService.setWorker(1);
     }
 
     /**
