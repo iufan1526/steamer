@@ -3,6 +3,7 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import { GenresEntity } from 'src/genres/entities/genres.entity';
 import { ImagesEntity } from 'src/images/entities/images.entity';
 import { SalesEntity } from 'src/sales/entities/sales.entity';
+import { text } from 'stream/consumers';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity('games')
@@ -28,6 +29,18 @@ export class GamesEntity extends BaseEntity {
         nullable: true,
     })
     movieUrl: string;
+
+    @Column({
+        type: 'text',
+    })
+    discription: string;
+
+    @Column({
+        type: 'text',
+        name: 'supported_languages',
+        nullable: true,
+    })
+    supportedLanguages: string;
 
     @Column({ name: 'is_possible_multi', default: false })
     @IsNotEmpty()
@@ -57,6 +70,7 @@ export class GamesEntity extends BaseEntity {
 
     @Column({
         type: 'text',
+        nullable: true,
     })
     @IsNotEmpty()
     minimumRequirement: string;
