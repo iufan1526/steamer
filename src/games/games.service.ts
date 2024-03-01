@@ -212,6 +212,8 @@ export class GamesService {
 
             await this.gamesRepository.save(newObj);
             console.log('게임 저장의 성공하였습니다. ㅊㅋㅊㅋ');
+        } else {
+            this.deleteGame(+appId);
         }
     }
 
@@ -266,7 +268,7 @@ export class GamesService {
             await this.saveGamesProcess();
         }
 
-        console.log('데이터 저장이 성공하였습니다');
+        console.log('데이터 저장이 모두 성공하였습니다');
 
         return true;
     }
