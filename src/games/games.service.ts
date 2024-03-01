@@ -142,9 +142,9 @@ export class GamesService {
         const gameDetail = game[appId];
 
         console.log('현재 게임 =>>>>>>>>>>>>>', gameDetail);
-        console.log('success 여부 =>>>> ', gameDetail.success);
-        console.log('data.is_free 여부 =>>>> ', !gameDetail.data.is_free);
-        console.log('gameDetail.data.type 여부 =>>>> ', gameDetail.data.type);
+        // console.log('success 여부 =>>>> ', gameDetail.success);
+        // console.log('data.is_free 여부 =>>>> ', !gameDetail.data.is_free);
+        // console.log('gameDetail.data.type 여부 =>>>> ', gameDetail.data.type);
 
         if (
             gameDetail.success &&
