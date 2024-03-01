@@ -32,6 +32,7 @@ export class GamesEntity extends BaseEntity {
 
     @Column({
         type: 'text',
+        nullable: true,
     })
     discription: string;
 
