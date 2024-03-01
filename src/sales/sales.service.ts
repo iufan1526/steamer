@@ -77,6 +77,28 @@ export class SalesService {
         }
         return foundGame;
     }
+
+    async checkSaleGames() {
+        const allSalesGame = await this.salesRepository.createQueryBuilder().select('id').getMany();
+
+        for (let i = 0; i < allSalesGame.length; i++) {
+            const id = allSalesGame[i].id;
+
+            const sale = await this.salesRepository.findOne({
+                where: {
+                    id,
+                },
+            });
+
+            if (sale.discountPercent <= 0 || !sale.discountPercent) {
+                await this.softDeleteSale(sale);
+            }
+        }
+    }
+
+    async softDeleteSale(sale: SalesEntity) {
+        await this.salesRepository.softDelete(sale);
+    }
 }
 
 export interface searchType {
