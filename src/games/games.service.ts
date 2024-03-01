@@ -142,9 +142,9 @@ export class GamesService {
         const gameDetail = game[appId];
 
         console.log('현재 게임 =>>>>>>>>>>>>>', gameDetail);
-        console.log('success 여부 =>>>> ', gameDetail.success);
-        console.log('data.is_free 여부 =>>>> ', !gameDetail.data.is_free);
-        console.log('gameDetail.data.type 여부 =>>>> ', gameDetail.data.type);
+        //console.log('success 여부 =>>>> ', gameDetail.success);
+        //console.log('data.is_free 여부 =>>>> ', !gameDetail.data.is_free);
+        //console.log('gameDetail.data.type 여부 =>>>> ', gameDetail.data.type);
 
         if (
             gameDetail.success &&
@@ -170,8 +170,8 @@ export class GamesService {
                         ? this.deleteHtmlTag(game.pc_requirements.minimum)
                         : null
                     : null,
-                discription: this.deleteHtmlTag(game.detailed_description),
-                supportedLanguages: this.deleteHtmlTag(game.supported_languages),
+                discription: game.detailed_description ? this.deleteHtmlTag(game.detailed_description) : null,
+                supportedLanguages: game.supported_languages ? this.deleteHtmlTag(game.supported_languages) : null,
             });
 
             if (game.categories) {
