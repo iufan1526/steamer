@@ -170,8 +170,8 @@ export class GamesService {
                         ? this.deleteHtmlTag(game.pc_requirements.minimum)
                         : null
                     : null,
-                discription: this.deleteHtmlTag(game.detailed_description),
-                supportedLanguages: this.deleteHtmlTag(game.supported_languages),
+                discription: game.detailed_description ? this.deleteHtmlTag(game.detailed_description) : null,
+                supportedLanguages: game.supported_languages ? this.deleteHtmlTag(game.supported_languages) : null,
             });
 
             if (game.categories) {
