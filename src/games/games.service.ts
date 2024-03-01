@@ -153,7 +153,7 @@ export class GamesService {
             gameDetail.data.type === 'game'
         ) {
             const game = gameDetail.data;
-
+            console.log('게임이 맞습니다 게임등록 시작');
             const newObj = this.gamesRepository.create({
                 name: game.name,
                 appId: game.steam_appid,
@@ -218,6 +218,7 @@ export class GamesService {
             await this.gamesRepository.save(newObj);
             console.log('게임 저장의 성공하였습니다. ㅊㅋㅊㅋ');
         } else {
+            console.log('게임이 아닙니다 삭제를 진행하겠습니다.');
             this.deleteGame(+appId);
         }
     }
@@ -287,7 +288,7 @@ export class GamesService {
      * @param appId
      */
     async deleteGame(appId: number) {
-        await this.gamesRepository.softDelete({ appId });
+        await this.rawGamesRepository.softDelete({ appId });
     }
 
     /**
