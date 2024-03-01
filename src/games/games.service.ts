@@ -132,15 +132,21 @@ export class GamesService {
     //     }
     // }
 
-    async detailGame(appId: number) {
-        const { data } = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${appId}&l=korean`);
+    async detailGame(appId: string) {
+        let result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${appId}&l=korean`);
 
-        return data;
+        if (!result.data) {
+            result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${appId}`);
+        }
+
+        return result.data;
     }
 
     async createGame(game: any, appId: string) {
         const gameDetail = game[appId];
 
+        console.log('raw 현재 게임 =>>>>>>>>>>>>>', appId);
+        console.log('raw 현재 게임 =>>>>>>>>>>>>>', game[appId]);
         console.log('현재 게임 =>>>>>>>>>>>>>', gameDetail);
         // console.log('success 여부 =>>>> ', gameDetail.success);
         // console.log('data.is_free 여부 =>>>> ', !gameDetail.data.is_free);
@@ -257,8 +263,9 @@ export class GamesService {
                 where: {},
             });
 
-            const gameDetailData = await this.detailGame(app.appId);
+            const gameDetailData = await this.detailGame(app.appId.toString());
 
+            console.log('저장전 데이터 ', gameDetailData);
             await this.createGame(gameDetailData, app.appId.toString());
 
             await this.deleteGame(app.appId);
