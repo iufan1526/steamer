@@ -2,10 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { FindManyOptions, FindOptions, Repository } from 'typeorm';
 import { SalesEntity } from './entities/sales.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import axios from 'axios';
+import { HttpService } from '@nestjs/axios';
+import { GET_GAME_DETAIL_BY_STEAM_URL } from 'src/games/const/api-url.const';
 
 @Injectable()
 export class SalesService {
     constructor(
+        private readonly httpService: HttpService,
         @InjectRepository(SalesEntity)
         private readonly salesRepository: Repository<SalesEntity>,
     ) {}
@@ -79,19 +83,18 @@ export class SalesService {
     }
 
     async checkSaleGames() {
-        const allSalesGame = await this.salesRepository.createQueryBuilder().select('id').getMany();
+        const allSalesGame = await this.salesRepository.find({ relations: ['game'] });
 
         for (let i = 0; i < allSalesGame.length; i++) {
-            const id = allSalesGame[i].id;
+            const games = allSalesGame[i].game;
 
-            const sale = await this.salesRepository.findOne({
-                where: {
-                    id,
-                },
-            });
+            const result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${games.appId}`);
 
-            if (sale.discountPercent <= 0 || !sale.discountPercent) {
-                await this.softDeleteSale(sale);
+            const discountPercent = result.data.discountPercent;
+
+            // 할인이 없는 경우 해당 판매를 삭제합니다.
+            if (discountPercent <= 0 || !discountPercent) {
+                await this.softDeleteSale(games);
             }
         }
     }
