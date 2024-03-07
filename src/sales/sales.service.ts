@@ -86,21 +86,21 @@ export class SalesService {
         const allSalesGame = await this.salesRepository.find({ relations: ['game'] });
 
         for (let i = 0; i < allSalesGame.length; i++) {
-            const games = allSalesGame[i].game;
+            const sale = allSalesGame[i].game;
 
-            const result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${games.appId}`);
+            const result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${sale.appId}`);
 
             const discountPercent = result.data.discountPercent;
 
             // 할인이 없는 경우 해당 판매를 삭제합니다.
             if (discountPercent <= 0 || !discountPercent) {
-                await this.softDeleteSale(games);
+                await this.softDeleteSale(sale.id);
             }
         }
     }
 
-    async softDeleteSale(sale: SalesEntity) {
-        await this.salesRepository.softDelete(sale);
+    async softDeleteSale(id: number) {
+        await this.salesRepository.softDelete(id);
     }
 }
 
