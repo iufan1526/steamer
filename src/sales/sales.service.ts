@@ -27,8 +27,6 @@ export class SalesService {
         const page: number = queryparam.page || 1;
         const skip: number = (page - 1) * take;
 
-        // 전체 게임수 조회 쿼리
-
         const totalCount = await this.salesRepository.count();
 
         const options: FindManyOptions<SalesEntity> = {
@@ -64,7 +62,6 @@ export class SalesService {
     }
 
     /**
-     * id 상세조회 코드 추가하기.
      * @param id
      * @returns
      */
