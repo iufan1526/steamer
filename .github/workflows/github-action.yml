@@ -2,11 +2,10 @@ name: CI/CD github actions and docker
 
 on:
     pull_request:
-        branches:
-            - div
+        branches: [div]
 
-permissions:
-    contents: read
+# permissions:
+#     contents: read
 
 jobs:
     build:
