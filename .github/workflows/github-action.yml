@@ -1,8 +1,9 @@
 name: CI/CD github actions and docker
 
 on:
-    push:
-        branches: ['div']
+    pull_request:
+        branches:
+            - div
 
 permissions:
     contents: read
