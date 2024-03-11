@@ -10,7 +10,6 @@ export class AppController {
         console.log('push 테스트');
         console.log('push 테스트');
         console.log('push 테스트');
-        console.log('push 테스트');
         return this.appService.getHello();
     }
 }
