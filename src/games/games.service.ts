@@ -23,115 +23,6 @@ export class GamesService {
         private readonly redisService: RedisService,
     ) {}
 
-    // async createGames(appId: number) {
-    //     const rawGames = await this.httpService.axiosRef.get(GET_GAMES_BY_STEAM_URL);
-    //     const { apps } = rawGames.data.applist;
-    //     let count = 0;
-
-    //     let startTime = Date.now();
-    //     let startMin = Date.now();
-    //     let count2 = 0;
-    //     for (let i = 0; i < 202; i++) {
-    //         if (apps[i].name) {
-    //             const { data } = await this.httpService.axiosRef.get(
-    //                 `${GET_GAME_DETAIL_BY_STEAM_URL}${apps[i].appid}&l=korean`,
-    //             );
-
-    //             const currentTime = Date.now();
-    //             if (currentTime - startTime >= 1000) {
-    //                 console.log(`초당요청수 ${count}`);
-    //                 startTime = currentTime;
-    //                 count = 0;
-    //             }
-    //             count++;
-
-    //             const currentTime2 = Date.now();
-    //             if (currentTime2 - startMin >= 1000 * 60) {
-    //                 console.log(`분당요청수 ${count2}`);
-    //                 startMin = currentTime2;
-    //                 count2 = 0;
-    //             }
-    //             console.log(`총합 ${count2}`);
-    //             count2++;
-
-    // if (
-    //     data[apps[i].appid].success &&
-    //     !data[apps[i].appid].data.is_free &&
-    //     !data[apps[i].appid].data.release_date.coming_soon &&
-    //     data[apps[i].appid].data.type === 'game'
-    // ) {
-    //     const game = data[apps[i].appid].data;
-
-    //                 const newObj = this.gamesRepository.create({
-    //                     name: game.name,
-    //                     appId: game.steam_appid,
-    //                     thumnail: game.header_image,
-    //                     score: game.metacritic ? game.metacritic.score : 0,
-    //                     recommentation: game.recommendations ? game.recommendations.total : 0,
-    //                     isWindow: game.platforms.windows,
-    //                     isLinux: game.platforms.linux,
-    //                     isMac: game.platforms.mac,
-    //                     movieUrl: game.movies ? game.movies[0].webm.max : null,
-    //                     releaseDate: game.release_date.date,
-    //                     minimumRequirement: game.pc_requirements
-    //                         ? game.pc_requirements.minimum
-    //                             ? this.deleteHtmlTag(game.pc_requirements.minimum)
-    //                             : null
-    //                         : null,
-    //                     discription: this.deleteHtmlTag(game.detailed_description),
-    //                     supportedLanguages: this.deleteHtmlTag(game.supported_languages),
-    //                 });
-
-    //                 /**
-    //                  * 멀티플레이 지원여부
-    //                  */
-    //                 if (game.categories) {
-    //                     game.categories.forEach((cate: { id: number }) => {
-    //                         cate.id === 1 ? (newObj.isPossibleMulti = true) : (newObj.isPossibleMulti = false);
-    //                     });
-    //                 }
-
-    //                 /**
-    //                  * 장르 추가
-    //                  */
-    //                 if (game.genres) {
-    //                     const genres: GenresEntity[] = game.genres.map((genre: { description: string }) => {
-    //                         return { genre: genre.description };
-    //                     });
-    //                     newObj.genres = genres;
-    //                 }
-
-    //                 /**
-    //                  * 사진 추가
-    //                  */
-    //                 if (game.screenshots) {
-    //                     const screenshots: ImagesEntity[] = game.screenshots.map((image: { path_full: string }) => {
-    //                         return { imageUrl: image.path_full };
-    //                     });
-    //                     newObj.images = screenshots;
-    //                 }
-
-    //                 /**
-    //                  * 가격 추가
-    //                  */
-    //                 if (game.price_overview) {
-    //                     if (game.price_overview.discount_percent > 0) {
-    //                         const sale = this.salesRepository.create({
-    //                             originPrice: this.spliceMoney(game.price_overview.initial),
-    //                             discountPrice: this.spliceMoney(game.price_overview.final),
-    //                             discountPercent: game.price_overview.discount_percent,
-    //                         });
-
-    //                         newObj.sales = [sale];
-    //                     }
-    //                 }
-
-    //                 await this.gamesRepository.save(newObj);
-    //             }
-    //         }
-    //     }
-    // }
-
     async detailGame(appId: string) {
         let result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${appId}&l=korean`);
 
@@ -193,6 +84,7 @@ export class GamesService {
                 const genres: GenresEntity[] = game.genres.map((genre: { description: string }) => {
                     return { genre: genre.description };
                 });
+
                 newObj.genres = genres;
             }
 
@@ -203,6 +95,7 @@ export class GamesService {
                 const screenshots: ImagesEntity[] = game.screenshots.map((image: { path_full: string }) => {
                     return { imageUrl: image.path_full };
                 });
+
                 newObj.images = screenshots;
             }
 
