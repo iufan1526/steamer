@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { FindManyOptions, FindOptions, Repository } from 'typeorm';
 import { SalesEntity } from './entities/sales.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -10,49 +10,80 @@ export class SalesService {
         private readonly salesRepository: Repository<SalesEntity>,
     ) {}
 
-    dummyData = [
-        {
-            appId: 1573300,
-            name: 'WISH - Paradise High',
-            thumnail: 'https://cdn.akamai.steamstatic.com/steam/apps/1573300/header.jpg?t=1619506304',
-            score: 0,
-            movieUrl: 'http://cdn.akamai.steamstatic.com/steam/apps/256832326/movie_max_vp9.webm?t=1619506300',
-            recommentation: 503,
-            isWindow: true,
-            isMac: false,
-            isLinux: false,
-            isPossibleMulti: false,
-            genres: ['Action', 'Adventure', 'Casual', 'Indie'],
-            images: [
-                'https://cdn.akamai.steamstatic.com/steam/apps/1573300/ss_f23906a40116d4c8cc7c84cc5956c5d4aede13bf.1920x1080.jpg?t=1619506304',
-                'https://cdn.akamai.steamstatic.com/steam/apps/1573300/ss_852875af94bf0c846024729b97fb748ff8d8018d.1920x1080.jpg?t=1619506304',
-                'https://cdn.akamai.steamstatic.com/steam/apps/1573300/ss_869baa750b7ba2be39ada5e554aa16b91ec7aa39.1920x1080.jpg?t=1619506304',
-                'https://cdn.akamai.steamstatic.com/steam/apps/1573300/ss_5168ffb286271f8e6bfddb9e4f25ef2300a3235e.1920x1080.jpg?t=1619506304',
-                'https://cdn.akamai.steamstatic.com/steam/apps/1573300/ss_e97773e01a67226637d3821c0e047b3a4b46fbb0.1920x1080.jpg?t=1619506304',
-                'https://cdn.akamai.steamstatic.com/steam/apps/1573300/ss_b591807988273526f2a5768579a0faa714b8d995.1920x1080.jpg?t=1619506304',
-                'https://cdn.akamai.steamstatic.com/steam/apps/1573300/ss_7336a1576b8fea5245a7c74f7ec550ffe7693c5a.1920x1080.jpg?t=1619506304',
-            ],
-        },
-        // sales entity
-        {
-            gameId: 10,
-            originPrice: 30000,
-            discountPercent: 30,
-            discountPrice: 10000,
-        },
-    ];
+    /**
+     * 게임 전체조회
+     * 이름, 가격정보, 할인율, 장르로 걸러짐.
+     * @returns processedGames
+     */
 
-    async getAllGames() {
-        // sales repository에 있는 정보를 모두 찾는다.
-        return await this.salesRepository.find({ relations: ['games'] });
+    async getAllGames(queryparam: searchType) {
+        console.log(queryparam);
+
+        const take: number = 3;
+        const page: number = queryparam.page || 1;
+        const skip: number = (page - 1) * take;
+
+        // 전체 게임수 조회 쿼리
+
+        const totalCount = await this.salesRepository.count();
+
+        const options: FindManyOptions<SalesEntity> = {
+            where: {
+                game: {
+                    genres: {
+                        genre: queryparam.genre,
+                    },
+                },
+            },
+            order: {
+                discountPercent: queryparam.discountPercent,
+            },
+
+            relations: { game: { genres: true } },
+            take,
+            skip,
+        };
+        const filterdGame = await this.salesRepository.find(options);
+
+        return {
+            data: filterdGame,
+            meta: {
+                totalCount,
+                take,
+                skip,
+                page,
+                lastPage: Math.ceil(totalCount / take),
+                // 전체수에서 페이지당 갯수를 나눈뒤 올림처리. ex) 10 / 3 = 3이나 올림처리하여 총페이지는 4페이지 처리가 된다.
+                // 프론트에서 데이터가 끝나는 지점.
+            },
+        };
     }
 
-    async getFilterdGames(query) {}
+    /**
+     * id 상세조회 코드 추가하기.
+     * @param id
+     * @returns
+     */
+    async getGameById(gameId: number) {
+        const foundGame = await this.salesRepository.findOne({
+            where: {
+                id: gameId,
+            },
+            relations: { game: { genres: true, images: true } },
+        });
+
+        if (!gameId) {
+            throw new NotFoundException();
+        }
+        return foundGame;
+    }
 }
 
-/**
- * 1. game api에서 이름과 app id를 가지고온다.
- * 2. 우리가 원하는 정보만 새로운 obj를 만들어서 집어넣는다 (세일여부 상관X)
- * 3. 조건들을 삽입한다.
- * 4. if(game.data.discountPercent <= 1)
- */
+export interface searchType {
+    genre?: string;
+    discountPercent?: 'asc' | 'desc';
+    discountPrice?: 'asc' | 'desc';
+    page: number;
+}
+// 유닛테스트 : method의 기능을 테스트하는것.
+// jest문서나 블로그 참조해서 테스트코드 작성해볼 것.
