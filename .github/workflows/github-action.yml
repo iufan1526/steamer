@@ -3,10 +3,10 @@ name: CI/CD github actions and docker
 on:
     push:
         branches:
-          - div
+            - dev
     pull_request:
-        branches: [div]
-        
+        branches: [dev]
+
 # permissions:
 #     contents: read
 
