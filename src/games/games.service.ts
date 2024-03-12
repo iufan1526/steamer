@@ -148,7 +148,7 @@ export class GamesService {
     async saveGamesProcess() {
         const worker = await this.redisService.getWorker();
 
-        if (parseInt(worker) === 1) {
+        if (parseInt(worker) === 2) {
             const app = await this.rawGamesRepository.findOne({
                 order: {
                     id: 'DESC',
@@ -163,7 +163,7 @@ export class GamesService {
 
             await this.deleteGame(app.appId);
 
-            await this.redisService.setWorker(2);
+            await this.redisService.setWorker(1);
 
             const length = await this.rawGamesRepository.count();
             console.log('남은 데이터수: ', length);
