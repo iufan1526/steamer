@@ -24,13 +24,19 @@ export class GamesService {
     ) {}
 
     async detailGame(appId: string) {
-        let result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${appId}&l=korean`);
+        try {
+            let result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${appId}&l=korean`);
 
-        if (!result.data) {
-            result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${appId}`);
+            if (!result.data) {
+                result = await this.httpService.axiosRef.get(`${GET_GAME_DETAIL_BY_STEAM_URL}${appId}`);
+            }
+
+            return result.data;
+        } catch (err) {
+            await this.deleteGame(+appId);
+
+            return null;
         }
-
-        return result.data;
     }
 
     async createGame(game: any, appId: string) {
@@ -42,6 +48,11 @@ export class GamesService {
         //console.log('success 여부 =>>>> ', gameDetail.success);
         //console.log('data.is_free 여부 =>>>> ', !gameDetail.data.is_free);
         //console.log('gameDetail.data.type 여부 =>>>> ', gameDetail.data.type);
+        console.log(gameDetail);
+
+        if (!gameDetail) {
+            this.deleteGame(+appId);
+        }
 
         if (
             gameDetail.success &&
@@ -157,6 +168,10 @@ export class GamesService {
             });
 
             const gameDetailData = await this.detailGame(app.appId.toString());
+
+            if (!gameDetailData) {
+                await this.saveGamesProcess();
+            }
 
             console.log('저장전 데이터 ', gameDetailData);
             await this.createGame(gameDetailData, app.appId.toString());

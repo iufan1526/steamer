@@ -31,7 +31,7 @@ export class GamesEntity extends BaseEntity {
     movieUrl: string;
 
     @Column({
-        type: 'text',
+        type: 'longtext',
         nullable: true,
     })
     discription: string;
